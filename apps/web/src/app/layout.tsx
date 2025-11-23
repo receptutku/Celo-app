@@ -1,35 +1,25 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-
-import { Navbar } from '@/components/navbar';
-import { WalletProvider } from "@/components/wallet-provider"
-
-const inter = Inter({ subsets: ['latin'] });
+import type { Metadata } from 'next'
+import { WalletProvider } from '@/components/wallet-provider'
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'celo-app',
-  description: 'A Celo dApp created with Celo Composer',
-};
+  title: 'Buy Me a Coffee - Celo dApp',
+  description: 'Support creators with CELO on Celo blockchain',
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {/* Navbar is included on all pages */}
-        <div className="relative flex min-h-screen flex-col">
-          <WalletProvider>
-            <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
-          </WalletProvider>
-        </div>
+      <body>
+        <WalletProvider>
+          {children}
+        </WalletProvider>
       </body>
     </html>
-  );
+  )
 }
+

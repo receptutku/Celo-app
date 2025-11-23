@@ -1,59 +1,146 @@
-# celo-app
+# Buy Me a Coffee - Celo dApp
 
-A Celo dApp created with Celo Composer
-
-A modern Celo blockchain application built with Next.js, TypeScript, and Turborepo.
-
-## Getting Started
-
-1. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-
-2. Start the development server:
-   ```bash
-   pnpm dev
-   ```
-
-3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+A decentralized application built on Celo Alfajores that allows users to send CELO tips and leave supportive messages.
 
 ## Project Structure
 
-This is a monorepo managed by Turborepo with the following structure:
+```
+celo-app/
+├── apps/
+│   ├── contracts/          # Smart contracts (Hardhat)
+│   │   ├── contracts/
+│   │   │   └── CoffeePortal.sol
+│   │   └── deploy-coffee.ts
+│   └── web/                # Next.js frontend
+│       └── src/
+│           ├── app/
+│           └── components/
+```
 
-- `apps/web` - Next.js application with embedded UI components and utilities
-- `apps/hardhat` - Smart contract development environment
+## Phase 1: Smart Contract Deployment
 
-## Available Scripts
+### Prerequisites
 
-- `pnpm dev` - Start development servers
-- `pnpm build` - Build all packages and apps
-- `pnpm lint` - Lint all packages and apps
-- `pnpm type-check` - Run TypeScript type checking
+1. Node.js and npm installed
+2. A wallet with CELO on Alfajores testnet
+   - Get testnet CELO from: https://faucet.celo.org/alfajores
+3. Your wallet's private key
 
-### Smart Contract Scripts
+### Deployment Steps
 
-- `pnpm contracts:compile` - Compile smart contracts
-- `pnpm contracts:test` - Run smart contract tests
-- `pnpm contracts:deploy` - Deploy contracts to local network
-- `pnpm contracts:deploy:alfajores` - Deploy to Celo Alfajores testnet
-- `pnpm contracts:deploy:sepolia` - Deploy to Celo Sepolia testnet
-- `pnpm contracts:deploy:celo` - Deploy to Celo mainnet
+1. **Navigate to contracts directory:**
+   ```bash
+   cd apps/contracts
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Create `.env` file:**
+   ```bash
+   echo "PRIVATE_KEY=your_private_key_here" > .env
+   ```
+
+4. **Compile the contract:**
+   ```bash
+   npm run compile
+   ```
+
+5. **Deploy to Alfajores:**
+   ```bash
+   npx ts-node deploy-coffee.ts
+   ```
+
+6. **Save the contract address** - you'll need it for the frontend!
+
+### Using MCP Tools for Network Verification
+
+You can use `celo-mcp` tools to verify network status and transaction details:
+
+- Check network connectivity
+- Get gas fee data
+- Verify deployed contract
+- Query contract state
+
+## Phase 2: Frontend Setup
+
+### Prerequisites
+
+1. Node.js and npm installed
+2. WalletConnect Project ID (get from https://cloud.walletconnect.com)
+3. Deployed contract address from Phase 1
+
+### Setup Steps
+
+1. **Navigate to web directory:**
+   ```bash
+   cd apps/web
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Create `.env.local` file:**
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+4. **Update `.env.local` with your values:**
+   ```
+   NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_COFFEE_PORTAL_ADDRESS=your_deployed_contract_address
+   ```
+
+5. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser:**
+   Navigate to `http://localhost:3000`
+
+## Features
+
+- ✅ Connect wallet using RainbowKit
+- ✅ Send 0.01 CELO with a message
+- ✅ View all supporter messages
+- ✅ Real-time transaction status
+- ✅ Beautiful, modern UI with Tailwind CSS
+- ✅ Dark mode support
+
+## Smart Contract Functions
+
+- `buyCoffee(string name, string message)` - Send CELO and leave a message
+- `getMemos()` - Retrieve all memos
+- `withdraw()` - Owner can withdraw accumulated tips
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: shadcn/ui
-- **Smart Contracts**: Hardhat with Viem
-- **Monorepo**: Turborepo
-- **Package Manager**: PNPM
+### Smart Contracts
+- Solidity ^0.8.20
+- Hardhat
+- TypeScript
+- Viem
 
-## Learn More
+### Frontend
+- Next.js 14 (App Router)
+- React 18
+- Tailwind CSS
+- RainbowKit
+- Wagmi
+- Viem
 
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Celo Documentation](https://docs.celo.org/)
-- [Turborepo Documentation](https://turbo.build/repo/docs)
-- [shadcn/ui Documentation](https://ui.shadcn.com/)
+## Network
+
+- **Testnet:** Celo Alfajores (Chain ID: 44787)
+- **RPC:** https://alfajores-forno.celo-testnet.org
+- **Explorer:** https://alfajores.celoscan.io
+
+## License
+
+MIT
+

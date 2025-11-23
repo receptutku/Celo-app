@@ -11,6 +11,14 @@
     "deploy:alfajores": "hardhat ignition deploy ignition/modules/Lock.ts --network alfajores",
     "deploy:sepolia": "hardhat ignition deploy ignition/modules/Lock.ts --network sepolia",
     "deploy:celo": "hardhat ignition deploy ignition/modules/Lock.ts --network celo",
+    "deploy:greeter": "hardhat ignition deploy ignition/modules/Greeter.ts",
+    "deploy:greeter:alfajores": "hardhat ignition deploy ignition/modules/Greeter.ts --network alfajores",
+    "deploy:greeter:sepolia": "hardhat ignition deploy ignition/modules/Greeter.ts --network sepolia",
+    "deploy:greeter:celo": "hardhat ignition deploy ignition/modules/Greeter.ts --network celo",
+    "deploy:simple-storage": "hardhat ignition deploy ignition/modules/SimpleStorage.ts",
+    "deploy:simple-storage:alfajores": "hardhat ignition deploy ignition/modules/SimpleStorage.ts --network alfajores",
+    "deploy:simple-storage:sepolia": "hardhat ignition deploy ignition/modules/SimpleStorage.ts --network sepolia",
+    "deploy:simple-storage:celo": "hardhat ignition deploy ignition/modules/SimpleStorage.ts --network celo",
     "verify": "hardhat verify",
     "clean": "hardhat clean",
     "typechain": "hardhat typechain"
@@ -48,6 +56,7 @@
     "viem": "^2.0.0"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^5.0.0"
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^17.2.3"
   }
 }

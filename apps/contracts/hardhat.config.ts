@@ -1,9 +1,12 @@
-import type { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox-viem";
+import { HardhatUserConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.28",
+    version: "0.8.20",
     settings: {
       optimizer: {
         enabled: true,
@@ -12,45 +15,23 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    // Celo Mainnet
-    celo: {
-      url: "https://forno.celo.org",
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 42220,
-    },
-    // Celo Alfajores Testnet
     alfajores: {
       url: "https://alfajores-forno.celo-testnet.org",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 44787,
     },
-    // Celo Sepolia Testnet
-    sepolia: {
-      url: "https://forno.celo-sepolia.celo-testnet.org",
+    celo: {
+      url: "https://forno.celo.org",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 11142220,
-    },
-    // Local development
-    localhost: {
-      url: "http://127.0.0.1:8545",
-      chainId: 31337,
+      chainId: 42220,
     },
   },
   etherscan: {
     apiKey: {
-      celo: process.env.CELOSCAN_API_KEY || "",
       alfajores: process.env.CELOSCAN_API_KEY || "",
-      sepolia: process.env.CELOSCAN_API_KEY || "",
+      celo: process.env.CELOSCAN_API_KEY || "",
     },
     customChains: [
-      {
-        network: "celo",
-        chainId: 42220,
-        urls: {
-          apiURL: "https://api.celoscan.io/api",
-          browserURL: "https://celoscan.io",
-        },
-      },
       {
         network: "alfajores",
         chainId: 44787,
@@ -60,19 +41,16 @@ const config: HardhatUserConfig = {
         },
       },
       {
-        network: "sepolia",
-        chainId: 11142220,
+        network: "celo",
+        chainId: 42220,
         urls: {
-          apiURL: "https://api-celo-sepolia.blockscout.com/api",
-          browserURL: "https://celo-sepolia.blockscout.com",
+          apiURL: "https://api.celoscan.io/api",
+          browserURL: "https://celoscan.io",
         },
       },
     ],
   },
-  gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
-    currency: "USD",
-  },
 };
 
 export default config;
+

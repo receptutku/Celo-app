@@ -1,6 +1,5 @@
 "use client"
 
-import { useState, useEffect } from 'react'
 import '@rainbow-me/rainbowkit/styles.css'
 import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { WagmiProvider } from 'wagmi'
@@ -38,9 +37,10 @@ let config: any = null
 function getWagmiConfig() {
   if (!config) {
     config = getDefaultConfig({
-      appName: 'celo-app',
+      appName: 'Buy Me a Coffee',
       projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID',
-      chains: [celo, celoAlfajores, celoSepolia],
+      // Prioritize Alfajores testnet
+      chains: [celoAlfajores, celo, celoSepolia],
       transports: {
         [celo.id]: http(),
         [celoAlfajores.id]: http(),
@@ -73,16 +73,7 @@ function WalletProviderInner({ children }: { children: React.ReactNode }) {
 }
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Show children without wallet functionality during SSR
-  if (!mounted) {
-    return <>{children}</>
-  }
-
+  // Always provide the WagmiProvider, even during SSR
+  // The hooks will work correctly once the client hydrates
   return <WalletProviderInner>{children}</WalletProviderInner>
 }
