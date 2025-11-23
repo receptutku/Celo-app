@@ -127,11 +127,13 @@ export default function Home() {
     <main className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             ☕ Buy Me a Coffee
           </h1>
-          <ConnectButton />
+          <div className="flex-shrink-0">
+            <ConnectButton />
+          </div>
         </div>
 
         {/* Main Card */}
