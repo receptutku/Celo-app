@@ -36,9 +36,15 @@ let config: any = null
 
 function getWagmiConfig() {
   if (!config) {
+    const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+    
+    if (!projectId || projectId === 'YOUR_PROJECT_ID') {
+      console.warn('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set. Wallet connection may not work properly.');
+    }
+    
     config = getDefaultConfig({
       appName: 'Buy Me a Coffee',
-      projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID',
+      projectId: projectId || 'default-project-id',
       // Prioritize Alfajores testnet
       chains: [celoAlfajores, celo, celoSepolia],
       transports: {
