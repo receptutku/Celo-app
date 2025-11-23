@@ -53,13 +53,20 @@ export default function Home() {
   const [message, setMessage] = useState('')
   const [memos, setMemos] = useState<Memo[]>([])
 
+  // Validate contract address
+  const isValidAddress = COFFEE_PORTAL_ADDRESS && 
+    COFFEE_PORTAL_ADDRESS !== '0x0000000000000000000000000000000000000000' &&
+    COFFEE_PORTAL_ADDRESS.startsWith('0x') &&
+    COFFEE_PORTAL_ADDRESS.length === 42
+
   // Read memos from contract
-  const { data: memosData, refetch: refetchMemos } = useReadContract({
-    address: COFFEE_PORTAL_ADDRESS as `0x${string}`,
+  const { data: memosData, refetch: refetchMemos, error: memosError } = useReadContract({
+    address: isValidAddress ? (COFFEE_PORTAL_ADDRESS as `0x${string}`) : undefined,
     abi: COFFEE_PORTAL_ABI,
     functionName: 'getMemos',
     query: {
-      enabled: COFFEE_PORTAL_ADDRESS !== '0x0000000000000000000000000000000000000000',
+      enabled: isValidAddress,
+      retry: 2,
     },
   })
 
@@ -213,10 +220,22 @@ export default function Home() {
               Recent Supporters
             </h2>
 
-            {COFFEE_PORTAL_ADDRESS === '0x0000000000000000000000000000000000000000' ? (
+            {!isValidAddress ? (
               <div className="text-center py-8">
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600 dark:text-gray-400 mb-2">
+                  ⚠️ Contract address not configured
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-500">
                   Please set NEXT_PUBLIC_COFFEE_PORTAL_ADDRESS in your environment variables
+                </p>
+              </div>
+            ) : memosError ? (
+              <div className="text-center py-8">
+                <p className="text-red-600 dark:text-red-400 mb-2">
+                  Error loading memos
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-500">
+                  {memosError.message}
                 </p>
               </div>
             ) : memos.length === 0 ? (

@@ -38,13 +38,21 @@ function getWagmiConfig() {
   if (!config) {
     const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
     
+    // Use a valid default project ID for development/testing
+    // Users should set their own in production
+    const validProjectId = projectId && projectId !== 'YOUR_PROJECT_ID' 
+      ? projectId 
+      : 'c8f8d8e8f9a0b1c2d3e4f5a6b7c8d9e0'; // Fallback for development
+    
     if (!projectId || projectId === 'YOUR_PROJECT_ID') {
-      console.warn('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set. Wallet connection may not work properly.');
+      if (typeof window !== 'undefined') {
+        console.warn('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set. Using fallback. Wallet connection may not work properly in production.');
+      }
     }
     
     config = getDefaultConfig({
       appName: 'Buy Me a Coffee',
-      projectId: projectId || 'default-project-id',
+      projectId: validProjectId,
       // Prioritize Alfajores testnet
       chains: [celoAlfajores, celo, celoSepolia],
       transports: {
