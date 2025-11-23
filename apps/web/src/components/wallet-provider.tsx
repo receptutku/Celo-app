@@ -35,14 +35,6 @@ const celoSepolia = defineChain({
 let config: any = null
 
 function getWagmiConfig() {
-  if (typeof window === 'undefined') {
-    // Return a minimal config for SSR
-    return {
-      chains: [celoAlfajores],
-      transports: {},
-    } as any;
-  }
-  
   if (!config) {
     const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
     
@@ -53,21 +45,34 @@ function getWagmiConfig() {
       : 'c8f8d8e8f9a0b1c2d3e4f5a6b7c8d9e0'; // Fallback for development
     
     if (!projectId || projectId === 'YOUR_PROJECT_ID') {
-      console.warn('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set. Using fallback. Wallet connection may not work properly in production.');
+      if (typeof window !== 'undefined') {
+        console.warn('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set. Using fallback. Wallet connection may not work properly in production.');
+      }
     }
     
-    config = getDefaultConfig({
-      appName: 'Buy Me a Coffee',
-      projectId: validProjectId,
-      // Prioritize Alfajores testnet
-      chains: [celoAlfajores, celo, celoSepolia],
-      transports: {
-        [celo.id]: http(),
-        [celoAlfajores.id]: http(),
-        [celoSepolia.id]: http(),
-      },
-      ssr: true,
-    })
+    try {
+      config = getDefaultConfig({
+        appName: 'Buy Me a Coffee',
+        projectId: validProjectId,
+        // Prioritize Alfajores testnet
+        chains: [celoAlfajores, celo, celoSepolia],
+        transports: {
+          [celo.id]: http(),
+          [celoAlfajores.id]: http(),
+          [celoSepolia.id]: http(),
+        },
+        ssr: true,
+      })
+    } catch (error) {
+      console.error('Error creating wagmi config:', error);
+      // Return a minimal config if getDefaultConfig fails
+      config = {
+        chains: [celoAlfajores],
+        transports: {
+          [celoAlfajores.id]: http(),
+        },
+      } as any;
+    }
   }
   return config
 }

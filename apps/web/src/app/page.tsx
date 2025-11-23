@@ -1,9 +1,15 @@
 'use client'
 
-import { ConnectButton } from '@rainbow-me/rainbowkit'
+import dynamic from 'next/dynamic'
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { useState, useEffect } from 'react'
 import { parseEther } from 'viem'
+
+// Dynamically import ConnectButton to avoid SSR issues
+const ConnectButton = dynamic(
+  () => import('@rainbow-me/rainbowkit').then((mod) => mod.ConnectButton),
+  { ssr: false }
+)
 
 // Contract ABI - Update this with your deployed contract address
 const COFFEE_PORTAL_ADDRESS = process.env.NEXT_PUBLIC_COFFEE_PORTAL_ADDRESS || '0x0000000000000000000000000000000000000000'
