@@ -144,3 +144,4 @@ You can use `celo-mcp` tools to verify network status and transaction details:
 
 MIT
 
+# Celo-app
