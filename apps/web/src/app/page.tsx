@@ -54,10 +54,12 @@ export default function Home() {
   const [memos, setMemos] = useState<Memo[]>([])
 
   // Validate contract address
-  const isValidAddress = COFFEE_PORTAL_ADDRESS && 
+  const isValidAddress = Boolean(
+    COFFEE_PORTAL_ADDRESS && 
     COFFEE_PORTAL_ADDRESS !== '0x0000000000000000000000000000000000000000' &&
     COFFEE_PORTAL_ADDRESS.startsWith('0x') &&
     COFFEE_PORTAL_ADDRESS.length === 42
+  )
 
   // Read memos from contract
   const { data: memosData, refetch: refetchMemos, error: memosError } = useReadContract({
